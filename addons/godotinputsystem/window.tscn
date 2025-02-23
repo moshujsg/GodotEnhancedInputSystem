@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://bl7sv3mqt31p3"]
+
+[node name="Window" type="Window"]
+position = Vector2i(0, 36)
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Key"
