@@ -11,38 +11,36 @@ A flexible input handling system for Godot that allows managing multiple input c
 
 ## Installation
 1. Copy the input system script(s) into your Godot project.
-2. Ensure that all input actions are registered in **Input Map** (found in **Project Settings > Input Map**).
-3. Use the provided API to manage input contexts in your game.
-
 ---
 
-## Usage
+## Usage  
 
-### 1. **Creating a Mapping Context**
-A **mapping context** is a collection of input actions. Each action in the context should have the same name as an `InputEventAction` in the **Input Map**.
+### 1. **Creating an Input Action**  
+1. Create a new resource → **InputAction**.  
+2. In the resource editor, assign it a name (e.g., `"Dash"`).  
+3. Navigate to **Project Settings → Input Map** and create an action with the same name (`"Dash"`).  
+4. Assign input events to the action (e.g., `Shift`).  
 
-Example:
-```gdscript
-var movement_context = InputMappingContext.new()
-movement_context.mappings = ["move_left", "move_right", "jump"]
-```
+### 2. **Creating a Mapping Context**  
+A **Mapping Context** is a resource that defines a collection of input actions. Each action in the context must match the name of an `InputEventAction` in the **Input Map** (found in **Project Settings**).  
 
-### 2. **Activating a Context**
-Use `push_mapping_context(context)` to activate a context. If multiple contexts are active, the most recently added one takes priority for conflicting actions.
+1. Create a new resource → **InputMappingContext**.  
+2. Under **Actions**, add `"Dash.tres"` and any additional **InputActions** needed.  
 
-Example:
-```gdscript
-input_system.push_mapping_context(movement_context)
-```
+### 3. **Creating a PlayerController**  
+The `PlayerController` class manages **Mapping Contexts** and their associated input actions.  
 
-### 3. **Removing a Context**
-Use `remove_mapping_context(context)` to deactivate a context. This restores priority to the previous context if it exists.
+1. Create a new script and extend **PlayerController**.  
+2. Define `@export` variables for each **InputAction**.  
+3. Call `super._ready()` within `_ready()`.  
+4. Use `bind_action` to associate each action with a method.  
+5. Specify a `TriggerPhase` when binding (e.g., `"InputAction.TriggerPhase.TRIGGERED"`).  
 
-Example:
-```gdscript
-input_system.remove_mapping_context(movement_context)
-```
+### 4. **Activating and Removing a Mapping Context**  
 
+- **Activate a context:** `push_mapping_context(InputMappingContext)`  
+- **Remove a context:** `remove_mapping_context(InputMappingContext)`
+  
 ### 4. **Handling Input Conflicts**
 If multiple contexts are active and **a key is bound to multiple actions**, only the most recent context’s action will be triggered. This ensures that higher-priority actions are handled first.
 
@@ -57,10 +55,10 @@ You can connect to any event from the `PlayerController` class by using the `bin
 
 ### **Event Types That Objects Can Connect To**
 ```gdscript
-enum TriggerState {
+enum TriggerPhase {
     TRIGGERED, # Condition was met
     STARTED, # On key down no matter what
-    COMPLETED, # Mostly on key up
+    COMPLETED, # After event was completed
     CANCELLED, # Condition wasn't met
     ONGOING # Event is still going but condition to trigger was not met
 }
@@ -79,27 +77,14 @@ enum Trigger {
     TAP
 }
 ```
-
----
-
 ## Example
-```gdscript
-# Create and configure contexts
-var gameplay_context = InputMappingContext.new()
-gameplay_context.mappings = ["move", "jump", "attack"]
+A "hold" trigger follows these phases:
 
-var menu_context = InputMappingContext.new()
-menu_context.mappings = ["confirm", "cancel"]
-
-# Activate gameplay context
-input_system.push_mapping_context(gameplay_context)
-
-# Later, activate menu context (this takes priority over gameplay)
-input_system.push_mapping_context(menu_context)
-
-# Remove menu context to restore gameplay controls
-input_system.remove_mapping_context(menu_context)
-```
+TriggerPhase.STARTED – Fired when the key is pressed down.
+TriggerPhase.ONGOING – Active until the hold threshold is reached (300 ms by default).
+TriggerPhase.TRIGGERED – Fires once the hold threshold is exceeded.
+TriggerPhase.COMPLETED – Fires on release if the trigger was activated.
+TriggerPhase.CANCELLED – Fires on release if the trigger was not activated.
 
 ---
 
