@@ -79,13 +79,13 @@ enum Trigger {
 ```
 ## Example
 A "hold" trigger follows these phases:
-
+```
 TriggerPhase.STARTED – Fired when the key is pressed down.
 TriggerPhase.ONGOING – Active until the hold threshold is reached (300 ms by default).
 TriggerPhase.TRIGGERED – Fires once the hold threshold is exceeded.
 TriggerPhase.COMPLETED – Fires on release if the trigger was activated.
 TriggerPhase.CANCELLED – Fires on release if the trigger was not activated.
-
+```
 ---
 
 ## License
