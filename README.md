@@ -6,7 +6,9 @@ A flexible input handling system for Godot that allows managing multiple input c
 - Organize input actions into separate **mapping contexts**.
 - Dynamically activate and deactivate contexts using `push_mapping_context` and `remove_mapping_context`.
 - Ensures that when multiple contexts are active, **only the most recent context** takes priority for overlapping actions.
-
+- Easily detect tap, hold, release etc..
+- Easily connect to multiple parts of the InputEvent Lifecycle
+  
 ---
 
 ## Installation
