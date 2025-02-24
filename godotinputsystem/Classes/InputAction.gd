@@ -23,12 +23,12 @@ enum State {
 enum Trigger {
 	DOWN,
 	HOLD,
-	HOLD_AND_RELEASE,
+	HOLD_AND_RELEASE, # Not implemented
 	PRESSED,
-	PULSE,
+	PULSE, # Not implemented
 	RELEASED,
 	TAP
-}
+}	
 
 signal on_button_state_reset(action: InputAction)
 signal on_event_fired(trigger_state : TriggerState)

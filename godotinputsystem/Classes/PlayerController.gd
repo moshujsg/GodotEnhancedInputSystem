@@ -23,7 +23,7 @@ func _input(event: InputEvent) -> void:
 			return
 		var flag := false
 		for mapping_context in mapping_contexts:
-			for action in mapping_context.mappings:
+			for action in mapping_context.actions:
 				if not event.is_action(action.name):
 					continue
 				handle_event(action)

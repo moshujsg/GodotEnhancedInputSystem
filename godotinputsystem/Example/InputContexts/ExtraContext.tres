@@ -3,10 +3,10 @@
 [ext_resource type="Script" uid="uid://b0b5cfu7c7dan" path="res://godotinputsystem/Classes/InputAction.gd" id="1_di2xb"]
 [ext_resource type="Resource" uid="uid://mfdnb0x554ka" path="res://godotinputsystem/Example/InputActions/Weapon1.tres" id="2_uaovw"]
 [ext_resource type="Resource" uid="uid://bpnrx3gk3k5ny" path="res://godotinputsystem/Example/InputActions/Weapon2.tres" id="3_3nwqt"]
-[ext_resource type="Resource" uid="uid://tvsudqof6fn8" path="res://godotinputsystem/Example/InputActions/CrouchOverwrite.tres" id="4_anvdf"]
+[ext_resource type="Resource" uid="uid://tvsudqof6fn8" path="res://godotinputsystem/Example/InputActions/Roll.tres" id="4_anvdf"]
 [ext_resource type="Script" uid="uid://dxf7fy688y1i4" path="res://godotinputsystem/Classes/InputMappingContext.gd" id="5_jf2go"]
 
 [resource]
 script = ExtResource("5_jf2go")
-mappings = Array[ExtResource("1_di2xb")]([ExtResource("2_uaovw"), ExtResource("3_3nwqt"), ExtResource("4_anvdf")])
+actions = Array[ExtResource("1_di2xb")]([ExtResource("4_anvdf"), ExtResource("2_uaovw"), ExtResource("3_3nwqt")])
 metadata/_custom_type_script = "uid://dxf7fy688y1i4"

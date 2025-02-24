@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cwbpwf1llae5x" path="res://godotinputsystem/Example/PlayerController/MyPlayerController.gd" id="1_imku0"]
 [ext_resource type="Script" uid="uid://dxf7fy688y1i4" path="res://godotinputsystem/Classes/InputMappingContext.gd" id="2_i5arm"]
 [ext_resource type="Resource" uid="uid://fs1c3t8g02pw" path="res://godotinputsystem/Example/InputActions/Jump.tres" id="3_a0tk4"]
-[ext_resource type="Resource" uid="uid://bgpjxaspigjx1" path="res://godotinputsystem/Example/InputContexts/MovementContex.tres" id="3_wc5p8"]
+[ext_resource type="Resource" uid="uid://bgpjxaspigjx1" path="res://godotinputsystem/Example/InputContexts/MovementContext.tres" id="3_wc5p8"]
 [ext_resource type="Resource" uid="uid://bdyv38rsy0ksa" path="res://godotinputsystem/Example/InputContexts/ExtraContext.tres" id="4_jsk3o"]
 [ext_resource type="Resource" uid="uid://dxnvu58qclbnd" path="res://godotinputsystem/Example/InputActions/MoveLeft.tres" id="4_r3fl7"]
 [ext_resource type="Resource" uid="uid://d1im72y63x88v" path="res://godotinputsystem/Example/InputActions/MoveUp.tres" id="7_cdqbm"]
@@ -12,7 +12,7 @@
 [ext_resource type="Resource" uid="uid://ctyes4hq6mn2" path="res://godotinputsystem/Example/InputActions/Crouch.tres" id="10_3v7ru"]
 [ext_resource type="Resource" uid="uid://mfdnb0x554ka" path="res://godotinputsystem/Example/InputActions/Weapon1.tres" id="11_tcnuu"]
 [ext_resource type="Resource" uid="uid://bpnrx3gk3k5ny" path="res://godotinputsystem/Example/InputActions/Weapon2.tres" id="12_tuemg"]
-[ext_resource type="Resource" uid="uid://tvsudqof6fn8" path="res://godotinputsystem/Example/InputActions/CrouchOverwrite.tres" id="13_imku0"]
+[ext_resource type="Resource" uid="uid://tvsudqof6fn8" path="res://godotinputsystem/Example/InputActions/Roll.tres" id="13_imku0"]
 
 [node name="Node3D" type="Node3D"]
 
