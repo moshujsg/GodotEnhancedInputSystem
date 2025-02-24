@@ -1,13 +1,15 @@
 class_name InputAction extends Resource
 
+# This is the event types that objects can connect to
 enum TriggerState {
-	TRIGGERED,
-	STARTED,
-	COMPLETED,
-	CANCELLED,
-	ONGOING
+	TRIGGERED, # Condition was met
+	STARTED, # On key down no matter what
+	COMPLETED, # Mostly on key up
+	CANCELLED, # Condition wasn't met
+	ONGOING # Event is still going but condition to trigger was not met
 }
 
+# This is an internal state that determines  
 enum State {
 	PRESS,
 	ONGOING,
@@ -17,6 +19,7 @@ enum State {
 	NONE
 }
 
+# This state determines the condition to fire triggered
 enum Trigger {
 	DOWN,
 	HOLD,
@@ -32,72 +35,77 @@ signal on_event_fired(trigger_state : TriggerState)
 
 @export var name : String
 @export var description : String
+
 @export var trigger : Trigger = Trigger.DOWN
-@export var one_shot : bool = false
+var met_trigger_condition := false
+
 @export var hold_threshold_ms := 300
 @export var tap_threshold_ms := 150
-var overwritten := false
+
+@export var one_shot : bool = false
 var one_shot_triggered := false
-var met_trigger_condition := false
+
 var current_state : State = State.NONE
 var next_state : State = State.NONE
+
 var press_time : int
+
 var state_trigger_map : Dictionary = {
 	Trigger.DOWN: {
-		State.PRESS: [TriggerState.STARTED, TriggerState.TRIGGERED],  # Fires when the button is first pressed.
-		State.ONGOING: [],  # No ongoing action since DOWN is a one-time event.
-		State.SUCCEED: [],     # No echo for DOWN.
-		State.RELEASE: [TriggerState.COMPLETED],  # Completes when released.
+		State.PRESS: [TriggerState.STARTED, TriggerState.TRIGGERED],
+		State.ONGOING: [],
+		State.SUCCEED: [],
+		State.RELEASE: [TriggerState.COMPLETED],
 		State.FAILED: [],
-		State.NONE: []  # No action for NONE.
+		State.NONE: []
 	},
 	Trigger.HOLD: {
-		State.PRESS: [TriggerState.STARTED],   # Fires when the button is pressed.
-		State.ONGOING: [TriggerState.ONGOING], # Continues as long as the button is held down.
-		State.SUCCEED: [TriggerState.TRIGGERED],  # Echo triggered while holding.
-		State.RELEASE: [TriggerState.COMPLETED],  # Completes when the button is released.
+		State.PRESS: [TriggerState.STARTED],
+		State.ONGOING: [TriggerState.ONGOING],
+		State.SUCCEED: [TriggerState.TRIGGERED], 
+		State.RELEASE: [TriggerState.COMPLETED],  
 		State.FAILED: [TriggerState.CANCELLED],
-		State.NONE: []  # No action for NONE.
+		State.NONE: [] 
 	},
 	Trigger.HOLD_AND_RELEASE: {
-		State.PRESS: [TriggerState.STARTED],  # Fires when the button is first pressed.
-		State.ONGOING: [],   # No ongoing action while holding AND releasing.
-		State.SUCCEED: [],      # No echo while holding and releasing.
-		State.RELEASE: [TriggerState.COMPLETED],  # Completes when the button is released.
+		State.PRESS: [TriggerState.STARTED],
+		State.ONGOING: [],
+		State.SUCCEED: [],
+		State.RELEASE: [TriggerState.COMPLETED],
 		State.FAILED: [TriggerState.CANCELLED],
-		State.NONE: []  # No action for NONE.
+		State.NONE: []
 	},
 	Trigger.PRESSED: {
-		State.PRESS: [TriggerState.STARTED],  # Fires when the button is first pressed.
-		State.ONGOING: [TriggerState.TRIGGERED],   # No ongoing action for PRESSED.
-		State.SUCCEED: [TriggerState.TRIGGERED],      # No echo for PRESSED.
-		State.RELEASE: [TriggerState.COMPLETED],  # Completes when released.
+		State.PRESS: [TriggerState.STARTED],
+		State.ONGOING: [TriggerState.TRIGGERED],
+		State.SUCCEED: [TriggerState.TRIGGERED],
+		State.RELEASE: [TriggerState.COMPLETED],
 		State.FAILED: [TriggerState.CANCELLED],
-		State.NONE: []  # No action for NONE.
+		State.NONE: [] 
 	},
 	Trigger.PULSE: {
-		State.PRESS: [TriggerState.STARTED],  # Fires when the button is first pressed.
-		State.ONGOING: [],   # No ongoing action for PULSE.
-		State.SUCCEED: [],      # No echo for PULSE.
-		State.RELEASE: [TriggerState.COMPLETED],  # Completes when released.
+		State.PRESS: [TriggerState.STARTED],
+		State.ONGOING: [],
+		State.SUCCEED: [],
+		State.RELEASE: [TriggerState.COMPLETED],
 		State.FAILED: [TriggerState.CANCELLED],
-		State.NONE: []  # No action for NONE.
+		State.NONE: []
 	},
 	Trigger.RELEASED: {
-		State.PRESS: [TriggerState.STARTED],  # Fires when the button is first pressed.
-		State.ONGOING: [],   # No ongoing action for RELEASED.
-		State.SUCCEED: [],      # No echo for RELEASED.
-		State.RELEASE: [TriggerState.TRIGGERED, TriggerState.COMPLETED],  # Completes when released.
+		State.PRESS: [TriggerState.STARTED],
+		State.ONGOING: [],
+		State.SUCCEED: [],
+		State.RELEASE: [TriggerState.TRIGGERED, TriggerState.COMPLETED],
 		State.FAILED: [TriggerState.CANCELLED],
-		State.NONE: []  # No action for NONE.
+		State.NONE: []
 	},
 	Trigger.TAP: {
-		State.PRESS: [TriggerState.STARTED],  # Fires when the button is first pressed.
-		State.ONGOING: [],   # No ongoing action for TAP.
-		State.SUCCEED: [],      # No echo for TAP.
-		State.RELEASE: [TriggerState.TRIGGERED, TriggerState.COMPLETED],  # Completes when released.
+		State.PRESS: [TriggerState.STARTED],
+		State.ONGOING: [],
+		State.SUCCEED: [],
+		State.RELEASE: [TriggerState.TRIGGERED, TriggerState.COMPLETED],
 		State.FAILED: [TriggerState.CANCELLED],
-		State.NONE: []  # No action for NONE.
+		State.NONE: []
 	}
 }
 var met_trigger_condition_initial_state : Dictionary[Trigger, bool] = {
@@ -127,6 +135,8 @@ func call_bind(p_event: TriggerState):
 		return
 	target_callable.call()
 
+# Gets called every frame from playercontroller if it's active
+# Can be made for each input action to keep track of itself instead.
 func update():
 	var delta_time := Time.get_ticks_msec() - press_time
 	if trigger == Trigger.HOLD and delta_time > hold_threshold_ms:
@@ -136,7 +146,7 @@ func update():
 
 	current_state = next_state
 	
-	# 
+
 	if current_state == State.PRESS:
 		next_state = State.ONGOING
 		press_time = Time.get_ticks_msec()
