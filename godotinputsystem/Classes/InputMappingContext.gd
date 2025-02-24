@@ -2,6 +2,7 @@ class_name InputMappingContext extends Resource
 
 @export var mappings : Array[InputAction]
 @export var mappings_dict : Dictionary
+var stack_index : int = 999
 
 func parse_mappings():
 	if not mappings_dict.is_empty():

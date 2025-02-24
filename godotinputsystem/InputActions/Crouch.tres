@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="InputAction" load_steps=2 format=3 uid="uid://ctyes4hq6mn2"]
+
+[ext_resource type="Script" uid="uid://b0b5cfu7c7dan" path="res://godotinputsystem/Classes/InputAction.gd" id="1_bnhm4"]
+
+[resource]
+script = ExtResource("1_bnhm4")
+name = "Crouch"
+description = ""
+trigger = 3
+one_shot = false
+hold_threshold_ms = 300
+tap_threshold_ms = 150
+metadata/_custom_type_script = "uid://b0b5cfu7c7dan"

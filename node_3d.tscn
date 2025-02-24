@@ -1,13 +1,38 @@
-[gd_scene load_steps=4 format=3 uid="uid://bslmdfp6cxwbv"]
+[gd_scene load_steps=14 format=3 uid="uid://bslmdfp6cxwbv"]
 
-[ext_resource type="Script" uid="uid://cksdy2en6ih87" path="res://addons/godotinputsystem/Classes/PlayerController.gd" id="1_a202f"]
-[ext_resource type="Resource" uid="uid://bgpjxaspigjx1" path="res://addons/godotinputsystem/NewContext.tres" id="2_noarx"]
-[ext_resource type="Resource" uid="uid://fs1c3t8g02pw" path="res://addons/godotinputsystem/Jump.tres" id="3_a0tk4"]
+[ext_resource type="Script" uid="uid://cksdy2en6ih87" path="res://godotinputsystem/Classes/PlayerController.gd" id="1_a202f"]
+[ext_resource type="Script" uid="uid://dxf7fy688y1i4" path="res://godotinputsystem/Classes/InputMappingContext.gd" id="2_i5arm"]
+[ext_resource type="Resource" uid="uid://fs1c3t8g02pw" path="res://godotinputsystem/InputActions/Jump.tres" id="3_a0tk4"]
+[ext_resource type="Resource" uid="uid://bgpjxaspigjx1" path="res://godotinputsystem/InputContexts/MovementContex.tres" id="3_wc5p8"]
+[ext_resource type="Resource" uid="uid://bdyv38rsy0ksa" path="res://godotinputsystem/InputContexts/ExtraContext.tres" id="4_jsk3o"]
+[ext_resource type="Resource" uid="uid://dxnvu58qclbnd" path="res://godotinputsystem/InputActions/MoveLeft.tres" id="4_r3fl7"]
+[ext_resource type="Resource" uid="uid://d1im72y63x88v" path="res://godotinputsystem/InputActions/MoveUp.tres" id="7_cdqbm"]
+[ext_resource type="Resource" uid="uid://dvuud1kxhl1k1" path="res://godotinputsystem/InputActions/MoveDown.tres" id="8_imku0"]
+[ext_resource type="Resource" uid="uid://wmh85hi8iy40" path="res://godotinputsystem/InputActions/MoveRight.tres" id="9_wlxy5"]
+[ext_resource type="Resource" uid="uid://ctyes4hq6mn2" path="res://godotinputsystem/InputActions/Crouch.tres" id="10_3v7ru"]
+[ext_resource type="Resource" uid="uid://mfdnb0x554ka" path="res://godotinputsystem/InputActions/Weapon1.tres" id="11_tcnuu"]
+[ext_resource type="Resource" uid="uid://bpnrx3gk3k5ny" path="res://godotinputsystem/InputActions/Weapon2.tres" id="12_tuemg"]
+[ext_resource type="Resource" uid="uid://tvsudqof6fn8" path="res://godotinputsystem/InputActions/CrouchOverwrite.tres" id="13_imku0"]
 
 [node name="Node3D" type="Node3D"]
 
 [node name="PlayerController" type="Node" parent="."]
 script = ExtResource("1_a202f")
-mapping_context = ExtResource("2_noarx")
+preset_mapping_contexts = Array[ExtResource("2_i5arm")]([ExtResource("3_wc5p8"), ExtResource("4_jsk3o")])
 jump = ExtResource("3_a0tk4")
+move_left = ExtResource("4_r3fl7")
+move_up = ExtResource("7_cdqbm")
+move_down = ExtResource("8_imku0")
+move_right = ExtResource("9_wlxy5")
+crouch = ExtResource("10_3v7ru")
+weapon_one = ExtResource("11_tcnuu")
+weapon_two = ExtResource("12_tuemg")
+crouch_overwrite = ExtResource("13_imku0")
 metadata/_custom_type_script = "uid://cksdy2en6ih87"
+
+[node name="Button" type="Button" parent="."]
+offset_right = 95.0
+offset_bottom = 44.0
+text = "Push new context"
+
+[connection signal="button_up" from="Button" to="PlayerController" method="_on_button_button_up"]

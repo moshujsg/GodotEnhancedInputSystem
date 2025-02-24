@@ -36,6 +36,7 @@ signal on_event_fired(trigger_state : TriggerState)
 @export var one_shot : bool = false
 @export var hold_threshold_ms := 300
 @export var tap_threshold_ms := 150
+var overwritten := false
 var one_shot_triggered := false
 var met_trigger_condition := false
 var current_state : State = State.NONE
