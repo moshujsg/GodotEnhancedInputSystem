@@ -12,7 +12,7 @@ func _ready() -> void:
 	for context in preset_mapping_contexts:
 		push_mapping_context(context)
 
-func bind_action(p_action : InputAction, p_event: InputAction.TriggerState,  p_function: Callable) -> void:
+func bind_action(p_action : InputAction, p_event: InputAction.TriggerPhase,  p_function: Callable) -> void:
 	p_action.bind_action(p_event, p_function)
 
 func _input(event: InputEvent) -> void:

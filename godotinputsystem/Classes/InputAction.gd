@@ -1,7 +1,7 @@
 class_name InputAction extends Resource
 
 # This is the event types that objects can connect to
-enum TriggerState {
+enum TriggerPhase {
 	TRIGGERED, # Condition was met
 	STARTED, # On key down no matter what
 	COMPLETED, # Mostly on key up
@@ -31,7 +31,7 @@ enum Trigger {
 }	
 
 signal on_button_state_reset(action: InputAction)
-signal on_event_fired(trigger_state : TriggerState)
+signal on_event_fired(trigger_state : TriggerPhase)
 
 @export var name : String
 @export var description : String
@@ -52,59 +52,59 @@ var press_time : int
 
 var state_trigger_map : Dictionary = {
 	Trigger.DOWN: {
-		State.PRESS: [TriggerState.STARTED, TriggerState.TRIGGERED],
+		State.PRESS: [TriggerPhase.STARTED, TriggerPhase.TRIGGERED],
 		State.ONGOING: [],
 		State.SUCCEED: [],
-		State.RELEASE: [TriggerState.COMPLETED],
+		State.RELEASE: [TriggerPhase.COMPLETED],
 		State.FAILED: [],
 		State.NONE: []
 	},
 	Trigger.HOLD: {
-		State.PRESS: [TriggerState.STARTED],
-		State.ONGOING: [TriggerState.ONGOING],
-		State.SUCCEED: [TriggerState.TRIGGERED], 
-		State.RELEASE: [TriggerState.COMPLETED],  
-		State.FAILED: [TriggerState.CANCELLED],
+		State.PRESS: [TriggerPhase.STARTED],
+		State.ONGOING: [TriggerPhase.ONGOING],
+		State.SUCCEED: [TriggerPhase.TRIGGERED], 
+		State.RELEASE: [TriggerPhase.COMPLETED],  
+		State.FAILED: [TriggerPhase.CANCELLED],
 		State.NONE: [] 
 	},
 	Trigger.HOLD_AND_RELEASE: {
-		State.PRESS: [TriggerState.STARTED],
+		State.PRESS: [TriggerPhase.STARTED],
 		State.ONGOING: [],
 		State.SUCCEED: [],
-		State.RELEASE: [TriggerState.COMPLETED],
-		State.FAILED: [TriggerState.CANCELLED],
+		State.RELEASE: [TriggerPhase.COMPLETED],
+		State.FAILED: [TriggerPhase.CANCELLED],
 		State.NONE: []
 	},
 	Trigger.PRESSED: {
-		State.PRESS: [TriggerState.STARTED],
-		State.ONGOING: [TriggerState.TRIGGERED],
-		State.SUCCEED: [TriggerState.TRIGGERED],
-		State.RELEASE: [TriggerState.COMPLETED],
-		State.FAILED: [TriggerState.CANCELLED],
+		State.PRESS: [TriggerPhase.STARTED],
+		State.ONGOING: [TriggerPhase.TRIGGERED],
+		State.SUCCEED: [TriggerPhase.TRIGGERED],
+		State.RELEASE: [TriggerPhase.COMPLETED],
+		State.FAILED: [TriggerPhase.CANCELLED],
 		State.NONE: [] 
 	},
 	Trigger.PULSE: {
-		State.PRESS: [TriggerState.STARTED],
+		State.PRESS: [TriggerPhase.STARTED],
 		State.ONGOING: [],
 		State.SUCCEED: [],
-		State.RELEASE: [TriggerState.COMPLETED],
-		State.FAILED: [TriggerState.CANCELLED],
+		State.RELEASE: [TriggerPhase.COMPLETED],
+		State.FAILED: [TriggerPhase.CANCELLED],
 		State.NONE: []
 	},
 	Trigger.RELEASED: {
-		State.PRESS: [TriggerState.STARTED],
+		State.PRESS: [TriggerPhase.STARTED],
 		State.ONGOING: [],
 		State.SUCCEED: [],
-		State.RELEASE: [TriggerState.TRIGGERED, TriggerState.COMPLETED],
-		State.FAILED: [TriggerState.CANCELLED],
+		State.RELEASE: [TriggerPhase.TRIGGERED, TriggerPhase.COMPLETED],
+		State.FAILED: [TriggerPhase.CANCELLED],
 		State.NONE: []
 	},
 	Trigger.TAP: {
-		State.PRESS: [TriggerState.STARTED],
+		State.PRESS: [TriggerPhase.STARTED],
 		State.ONGOING: [],
 		State.SUCCEED: [],
-		State.RELEASE: [TriggerState.TRIGGERED, TriggerState.COMPLETED],
-		State.FAILED: [TriggerState.CANCELLED],
+		State.RELEASE: [TriggerPhase.TRIGGERED, TriggerPhase.COMPLETED],
+		State.FAILED: [TriggerPhase.CANCELLED],
 		State.NONE: []
 	}
 }
@@ -118,18 +118,18 @@ var met_trigger_condition_initial_state : Dictionary[Trigger, bool] = {
 	Trigger.TAP: true
 }
 
-var bound_actions : Dictionary[TriggerState, Callable] = {
-	TriggerState.TRIGGERED: Callable(),
-	TriggerState.STARTED: Callable(),
-	TriggerState.COMPLETED: Callable(),
-	TriggerState.CANCELLED: Callable(),
-	TriggerState.ONGOING: Callable()
+var bound_actions : Dictionary[TriggerPhase, Callable] = {
+	TriggerPhase.TRIGGERED: Callable(),
+	TriggerPhase.STARTED: Callable(),
+	TriggerPhase.COMPLETED: Callable(),
+	TriggerPhase.CANCELLED: Callable(),
+	TriggerPhase.ONGOING: Callable()
 }
 
-func bind_action(p_event: InputAction.TriggerState,  p_function: Callable):
+func bind_action(p_event: InputAction.TriggerPhase,  p_function: Callable):
 	bound_actions[p_event] = p_function
 
-func call_bind(p_event: TriggerState):
+func call_bind(p_event: TriggerPhase):
 	var target_callable := bound_actions[p_event]
 	if target_callable.is_null():
 		return
@@ -152,7 +152,7 @@ func update():
 		press_time = Time.get_ticks_msec()
 		met_trigger_condition = met_trigger_condition_initial_state[trigger]
 	
-	var events_to_fire : Array[TriggerState]
+	var events_to_fire : Array[TriggerPhase]
 	var state_to_check : State = current_state
 
 	if current_state == State.ONGOING and met_trigger_condition:

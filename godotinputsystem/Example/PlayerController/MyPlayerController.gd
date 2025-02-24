@@ -13,15 +13,15 @@ class_name MyPlayerController extends PlayerController
 
 func _ready() -> void:
 	super._ready()
-	bind_action(jump, InputAction.TriggerState.TRIGGERED, on_action.bind(jump))
-	bind_action(move_left, InputAction.TriggerState.TRIGGERED, on_action.bind(move_left))
-	bind_action(move_up, InputAction.TriggerState.TRIGGERED, on_action.bind(move_up))
-	bind_action(move_down, InputAction.TriggerState.TRIGGERED, on_action.bind(move_down))
-	bind_action(move_right, InputAction.TriggerState.TRIGGERED, on_action.bind(move_right))
-	bind_action(crouch, InputAction.TriggerState.TRIGGERED, on_action.bind(crouch))
-	bind_action(weapon_one, InputAction.TriggerState.TRIGGERED, on_action.bind(weapon_one))
-	bind_action(weapon_two, InputAction.TriggerState.TRIGGERED, on_action.bind(weapon_two))
-	bind_action(crouch_overwrite, InputAction.TriggerState.TRIGGERED, on_action.bind(crouch_overwrite))
+	bind_action(jump, InputAction.TriggerPhase.TRIGGERED, on_action.bind(jump))
+	bind_action(move_left, InputAction.TriggerPhase.TRIGGERED, on_action.bind(move_left))
+	bind_action(move_up, InputAction.TriggerPhase.TRIGGERED, on_action.bind(move_up))
+	bind_action(move_down, InputAction.TriggerPhase.TRIGGERED, on_action.bind(move_down))
+	bind_action(move_right, InputAction.TriggerPhase.TRIGGERED, on_action.bind(move_right))
+	bind_action(crouch, InputAction.TriggerPhase.TRIGGERED, on_action.bind(crouch))
+	bind_action(weapon_one, InputAction.TriggerPhase.TRIGGERED, on_action.bind(weapon_one))
+	bind_action(weapon_two, InputAction.TriggerPhase.TRIGGERED, on_action.bind(weapon_two))
+	bind_action(crouch_overwrite, InputAction.TriggerPhase.TRIGGERED, on_action.bind(crouch_overwrite))
 
 func on_action(action: InputAction):
 	print(action.name)
