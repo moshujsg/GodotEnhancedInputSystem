@@ -8,7 +8,13 @@ A flexible input handling system for Godot that allows managing multiple input c
 - Ensures that when multiple contexts are active, **only the most recent context** takes priority for overlapping actions.
 - Easily detect tap, hold, release etc..
 - Easily connect to multiple parts of the InputEvent Lifecycle
-  
+
+---
+
+## Requirements
+
+- Requires Godot 4.4 (Tested on RC1)
+
 ---
 
 ## Installation
