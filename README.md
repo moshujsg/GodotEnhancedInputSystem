@@ -89,7 +89,7 @@ TriggerPhase.CANCELLED – Fires on release if the trigger was not activated.
 ---
 
 ## License
-[MIT License](LICENSE)
+[MIT License]([LICENSE](https://mit-license.org/))
 
 ---
 
